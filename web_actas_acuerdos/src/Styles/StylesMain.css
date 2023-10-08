@@ -1,0 +1,128 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Rosario;
+}
+
+.bannerMain{
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: #faf4f4;
+    background-size: cover;
+    background-position: center;
+}
+
+.navbar{
+    background-color: #092D4E;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.logo{
+    margin: .3rem;
+}
+
+.navbar-back ul{
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar-back li{
+    list-style: none;
+}
+
+.navbar-back li a{
+    text-decoration: none;
+    color: white;
+    padding: 1rem;
+    display: block;
+    font-size: 25px;
+}
+
+.navbar-back li:hover{
+    background-color: #555;
+}
+
+.box1{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 400px;
+    background: none;
+    border-radius: 10px;
+}
+
+.box1 form{
+    padding: 0 40px;
+}
+
+form .textBoxMain{
+    position: relative;
+    border-bottom: 2px solid #DBDDDE;
+    margin: 30px 0;
+}
+
+.textBoxMain input{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 5px;
+    height: 40px;
+    font-size: 16px;
+    outline: none;
+}
+
+.textBoxMain label{
+    color: #1C3E82;
+    font-size: 16px;
+}
+
+.dateInputs {
+    display: flex; 
+}
+
+.dateInput {
+    margin-right: 20px; 
+}
+
+.btnBuscar{
+    width: 100px;
+    height: 40px;
+    background: #0F7EE4;
+    border-radius: 5px;
+    border: none;
+    font-size: 20px;
+    color: #faf4f4;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.btnBuscar:hover{
+    background: #1C3E82;
+    transition: .5s;
+}
+
+.btnAgregar{
+    width: 150px;
+    height: 40px;
+    background: #0ec114;
+    border-radius: 5px;
+    border: none;
+    font-size: 20px;
+    color: #faf4f4;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.btnAgregar:hover{
+    background: #08680b;
+    transition: .5s;
+}

@@ -1,0 +1,52 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Rosario;
+}
+
+.ubicarBtns{
+    display: flex;
+}
+
+.ubicarHorizontal{
+    margin-top: 50px;
+    margin-right: 20px;
+}
+
+.btnVolver{
+    width: 150px;
+    height: 40px;
+    background: #de1e1e;
+    border-radius: 5px;
+    border: none;
+    font-size: 20px;
+    color: #faf4f4;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.btnVolver:hover{
+    background: #6c0505;
+    transition: .5s;
+}
+
+.btnConfirmar{
+    width: 150px;
+    height: 40px;
+    background: #0F7EE4;
+    border-radius: 5px;
+    border: none;
+    font-size: 20px;
+    color: #faf4f4;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.btnConfirmar:hover{
+    background: #1C3E82;
+    transition: .5s;
+}
+

@@ -1,0 +1,141 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Rosario;
+}
+
+.banner{
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    background-size: cover;
+    background-position: center;
+}
+
+.navbar{
+    background-color: #092D4E;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.logo{
+    margin: .3rem;
+}
+
+.navbar-back ul{
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar-back li{
+    list-style: none;
+}
+
+.navbar-back li a{
+    text-decoration: none;
+    color: white;
+    padding: 1rem;
+    display: block;
+    font-size: 25px;
+}
+
+.navbar-back li:hover{
+    background-color: #555;
+}
+
+/*------------Estilos de VerActa-----------*/
+
+.btnRegresar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 2em 8em;
+}
+  
+.btnRegresar-icon {
+    font-size: 24px; /* Tamaño del ícono */
+    margin-right: 4px; /* Espacio entre el ícono y el texto */
+}
+  
+.btnRegresar-txt {
+    font-size: 20px; /* Tamaño del texto */
+}
+  
+.header{
+    text-align: center;
+    padding-bottom: 35px;
+    color: #1C3E82;
+}
+
+.container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 1em;
+    margin: 2em;
+    transform: translate(-50%,-50%);
+    width: 40em;
+    text-align: left;
+    color: #000000;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.lblPalabrasClaves{
+    position: relative;
+    border-bottom: 2px solid #ccc;
+    font-size: 16px;
+    margin: 1rem;
+}
+
+.lblUltimaModif, .historial p{
+    margin: 2rem 0;
+}
+
+.filaHistorial {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+    padding: 8px 0;
+  }
+  
+.filaUsuario,
+.filaRegistro,
+.filaFecha {
+    flex: 1;
+    margin: 0 8px;
+}
+
+.botones{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.btnModificar, .btnDescargar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 0 30px;
+    border: none;
+    cursor: pointer;
+}
+
+.btnModificar-icon, .btnDescargar-icon {
+    margin-bottom: 8px;
+}
+  
+.btnModificar-txt, .btnDescargar-txt {
+    font-weight: bold;
+}
+  
+  
