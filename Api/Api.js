@@ -17,9 +17,10 @@ app.get('/holamundo', (req, res) => {
 app.get('/usuarios', async (req, res) => {
     try {
         console.log("algo1");
-        const usuarios = await pool.query('SELECT nombre, apellido1, apellido2 FROM usuarios');
+        const usuarios = await pool.query('SELECT nombre, apellido1, apellido2 FROM qa.usuarios');
         console.log("algo2");
         res.json(usuarios.rows);
+        console.log(res);
         console.log("algo3");
     } catch (error) {
         console.error('Error al obtener usuarios:', error);

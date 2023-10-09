@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../assets/LogoTEC.png"
 import "../Styles/StylesMain.css"
 import "../Styles/StylesAgregar.css"
@@ -30,12 +30,12 @@ function AgregarPage(){
         alert('Wait');
 
         try{
-            const response = await axios.get('http://localhost:3001/usuarios', datos);
-            console.log(response.data);
-            alert("Conexión hecha");
+            const response = await axios.get('http://localhost:3001/usuarios', datos)
+            console.log(response.data[0])
+            alert("Conexión hecha")
         }
         catch(err){
-            alert("Error en la consulta");
+            alert("Error en la consulta")
         }
 
         alert('Wait2');
