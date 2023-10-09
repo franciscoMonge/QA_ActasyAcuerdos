@@ -3,7 +3,7 @@ import LoginPage from "./Screens/LoginPage";
 import MainPage from "./Screens/MainPage";
 import AgregarPage from "./Screens/AgregarPage";
 import ModificarPage from "./Screens/ModificarPage";
-import VerActa from "./Screens/VerActa";
+import VerActaPage from "./Screens/VerActaPage";
 function App() {
   return (
     <Router>
@@ -12,7 +12,7 @@ function App() {
         <Route path="/MainPage" element={<MainPage/>}/>
         <Route path="/AgregarActa" element={<AgregarPage/>}/>
         <Route path="/ModificarActa" element={<ModificarPage/>}/>
-        <Route path="/VerDetalle" element={<VerActa/>}/>
+        <Route path="/VerDetalle" element={<VerActaPage/>}/>
       </Routes>
     </Router>
   );

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import logo from '../assets/LogoTEC.png'
 import "../Styles/VerActa.css"
 
-export function VerActa(){
+export function VerActaPage(){
     return (
     <div className='page'>
         <div className="navbar">
@@ -66,4 +66,4 @@ export function VerActa(){
     )
 }
 
-export default VerActa
+export default VerActaPage
