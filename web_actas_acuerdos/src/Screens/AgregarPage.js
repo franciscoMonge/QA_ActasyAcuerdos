@@ -30,13 +30,15 @@ function AgregarPage(){
         alert('Wait');
 
         try{
-            const response = await axios.get('http://localhost:3001/holamundo', datos)
-            console.log(response)
-            alert("Conexión hecha")
+            const response = await axios.get('http://localhost:3001/usuarios', datos);
+            console.log(response.data);
+            alert("Conexión hecha");
         }
         catch(err){
-            alert("Error en la consulta")
+            alert("Error en la consulta");
         }
+
+        alert('Wait2');
     };
 
     // Función para ajustar el tamaño del textarea según el contenido
