@@ -27,18 +27,15 @@ function AgregarPage(){
         console.log(datos);
         console.log(datos.keyWordsTokens);
         console.log(datos.archivo);
-        alert('Wait');
 
         try{
             const response = await axios.get('http://localhost:3001/usuarios', datos)
-            console.log(response.data[0])
+            console.log(response.data)
             alert("Conexión hecha")
         }
         catch(err){
             alert("Error en la consulta")
         }
-
-        alert('Wait2');
     };
 
     // Función para ajustar el tamaño del textarea según el contenido
@@ -135,10 +132,10 @@ function AgregarPage(){
                     <div>
                         <div className="ubicarBtns">
                             <div className="ubicarHorizontal">
-                                <button className="btnVolver" type="button">Volver</button>
+                                <button type="button" className="btnVolver">Volver</button>
                             </div>
                             <div className="ubicarHorizontal">
-                                <button className="btnConfirmar" onClick={handleConfirmar}>Confirmar</button>
+                                <button type="button" className="btnConfirmar" onClick={handleConfirmar}>Confirmar</button>
                             </div>
                         </div>
                     </div>
