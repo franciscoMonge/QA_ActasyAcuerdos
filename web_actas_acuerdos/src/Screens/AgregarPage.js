@@ -5,6 +5,7 @@ import "../Styles/StylesAgregar.css"
 import axios from 'axios';
 
 function AgregarPage(){
+    //const [consecutivo, setConsecutivo] = useState('');
     const [titulo, setTitulo] = useState('');
     const [keyWords, setKeyWords] = useState('');
     const [agenda, setAgenda] = useState('');
@@ -16,12 +17,13 @@ function AgregarPage(){
     const handleConfirmar = async () => {
         const keyWordsTokens = keyWords.split(/,\s*/);
         const datos = {
+            consecutivo: 1,
             titulo,
             keyWordsTokens,
             agenda,
             fechaDesde,
             fechaHasta,
-            archivo
+            nombreArchivo
         };
 
         console.log(datos);
@@ -29,12 +31,12 @@ function AgregarPage(){
         console.log(datos.archivo);
 
         try{
-            const response = await axios.get('http://localhost:3001/usuarios', datos)
-            console.log(response.data)
-            alert("Conexión hecha")
+            const response = await axios.post('http://localhost:3001/agregar_acta', datos);
+            console.log(response.data);
+            alert("Acta subida exitosamente.");
         }
         catch(err){
-            alert("Error en la consulta")
+            alert("Error al subir el acta: ", err);
         }
     };
 
