@@ -2,7 +2,41 @@ import React, { Fragment } from 'react';
 import logo from '../assets/LogoTEC.png'
 import "../Styles/VerActa.css"
 
-export function VerActaPage(){
+export function VerActaPage(id_acta){
+    // Acá se ponen las variables de esa ventana
+    const [titulo, setTitulo] = useState('');
+    const [fechaDesde, setFechaDesde] = useState('');
+    const [fechaHasta, setFechaHasta] = useState('');
+    const [palabrasClave, setpalabrasClave] = useState('');
+    const [ultimaModif, setultimaModif] = useState('');
+    const [agenda, setAgenda] = useState('');
+    const [modificaciones, setModificaciones] = useState('');//valorar text area o n registros
+    const [archivo, setArchivo] = useState('');
+
+    //Funcion para obtener datos de la Base de Datos
+    useEffect(() => {
+        // Verifica si tienes el ID del acta antes de realizar la solicitud a la API.
+        if (id_acta) {
+          fetch(`/api/acta/${id_acta}`) //Cambiar por la dirección adecuada
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error('No se puede encontrar información.');
+              }
+              return response.json();
+            })
+            .then((actaData) => {
+                // Accede a los campos del objeto "data"
+                const titulo = actaData.titulo;
+                const fechaDesde = actaData.fecha;
+                const palabrasClave = actaData.palabras_clave;
+                const archivo = actaData.url_archivo;
+                const agenda = actaData.agenda;
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      }, [id_acta]);   
     return (
     <div className='page'>
         <div className="navbar">

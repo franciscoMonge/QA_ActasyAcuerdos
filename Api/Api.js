@@ -74,14 +74,24 @@ app.post('/modificar_acta', async (req, res) => {
     }
 });
 
-app.get('/usuarios', async (req, res) => {
+app.get('/obtener_info_acta', async (req, res) => {
     try {
-        uarios = await pool.query('SELECT nombre, apellido1, apellido2 FROM qa.usuarios');
+        info_acta = await pool.query('SELECT titulo, fecha, palabras_clave, url_archivo FROM qa.actas WHERE id =='id_Acta);
         res.json(usuarios.rows);
     } catch (error) {
         console.error('Error al obtener usuarios:', error);
         res.status(500).json({ error: 'Error al obtener usuarios' });
     }
+});
+// Ruta para VerActaDetalle 
+app.get('/usuarios', async (req, res) => {
+  try {
+      usuarios = await pool.query('SELECT nombre, apellido1, apellido2 FROM qa.usuarios');
+      res.json(usuarios.rows);
+  } catch (error) {
+      console.error('Error al obtener usuarios:', error);
+      res.status(500).json({ error: 'Error al obtener usuarios' });
+  }
 });
 
 // Iniciar el servidor
