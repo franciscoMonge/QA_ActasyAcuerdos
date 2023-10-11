@@ -26,10 +26,6 @@ function AgregarPage(){
             nombreArchivo
         };
 
-        console.log(datos);
-        console.log(datos.keyWordsTokens);
-        console.log(datos.archivo);
-
         try{
             const response = await axios.post('http://localhost:3001/agregar_acta', datos);
             console.log(response.data);
