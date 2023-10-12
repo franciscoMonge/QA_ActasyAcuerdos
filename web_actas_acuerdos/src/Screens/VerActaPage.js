@@ -17,7 +17,7 @@ export function VerActaPage(id_acta){
     useEffect(() => {
         // Verifica si tienes el ID del acta antes de realizar la solicitud a la API.
         if (id_acta) {
-          fetch(`/api/acta/${id_acta}`) //Cambiar por la dirección adecuada
+          fetch(`/api/obtener_info_acta/${id_acta}`) //Cambiar por la dirección adecuada
             .then((response) => {
               if (!response.ok) {
                 throw new Error('No se puede encontrar información.');

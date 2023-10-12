@@ -4,6 +4,7 @@ import MainPage from "./Screens/MainPage";
 import AgregarPage from "./Screens/AgregarPage";
 import ModificarPage from "./Screens/ModificarPage";
 import VerActaPage from "./Screens/VerActaPage";
+//import obtener_info_acta from "./Screens/VerActaPage";
 function App() {
   return (
     <Router>

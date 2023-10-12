@@ -73,17 +73,34 @@ app.post('/modificar_acta', async (req, res) => {
       res.status(500).json({ mensaje: 'Error al insertar la entrada.' });
     }
 });
-
-app.get('/obtener_info_acta', async (req, res) => {
-    try {
-        info_acta = await pool.query('SELECT titulo, fecha, palabras_clave, url_archivo FROM qa.actas WHERE id =='id_Acta);
-        res.json(usuarios.rows);
-    } catch (error) {
-        console.error('Error al obtener usuarios:', error);
-        res.status(500).json({ error: 'Error al obtener usuarios' });
-    }
+// Ruta para Obtener Bitácoras 
+app.post('/obtener_bitacoras_id', async (req, res) => {
+  try {
+    const { 
+      id_acta
+    } = req.body;
+      info_acta = await pool.query('SELECT id_acta, fecha, updated_by, tchecksum FROM qa.bitacora_actas WHERE id_acta ==' id_acta);
+      res.json(info_acta.rows);
+  } catch (error) {
+      console.error('Error al obtener bitácoras:', error);
+      res.status(500).json({ error: 'Error al obtener bitácoras' });
+  }
 });
-// Ruta para VerActaDetalle 
+
+// Ruta para Obtener Ultima Bitacora
+app.post('/obtener_ultima_bitacora', async (req, res) => {
+  try {
+    const { 
+      id_acta
+    } = req.body;
+      info_acta = await pool.query('SELECT updated_by FROM qa.bitacora_actas INNER JOIN qa.usuarios ON qa.usuarios.id == qa.bitacora_actas.updated_by WHERE id_acta ==' id_acta);
+      res.json(info_acta.rows);
+  } catch (error) {
+      console.error('Error al obtener bitácoras:', error);
+      res.status(500).json({ error: 'Error al obtener bitácoras' });
+  }
+});
+
 app.get('/usuarios', async (req, res) => {
   try {
       usuarios = await pool.query('SELECT nombre, apellido1, apellido2 FROM qa.usuarios');
