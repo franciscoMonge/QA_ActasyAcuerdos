@@ -1,18 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../assets/LogoTEC.png"
 import "../Styles/StylesMain.css"
 import "../Styles/StylesAgregar.css"
 import axios from 'axios';
 
 function ModificarPage(){
+    const [consecutivo, setConsecutivo] = useState('');
     const [titulo, setTitulo] = useState('');
     const [keyWords, setKeyWords] = useState('');
     const [agenda, setAgenda] = useState('');
     const [fechaDesde, setFechaDesde] = useState('');
     const [fechaHasta, setFechaHasta] = useState('');
-    const [archivo, setArchivo] = useState('');
-    const [nombreArchivo, setNombreArchivo] = useState('');
-
     // Función para ajustar el tamaño del textarea según el contenido
     const handleResizeTextarea = (event) => {
         const textarea = event.target;
@@ -20,6 +18,29 @@ function ModificarPage(){
         textarea.style.height = `${textarea.scrollHeight}px`;
         setAgenda(event.target.value);
     };
+
+    const formatearFecha = (fecha) => {
+        const año = fecha.getFullYear();
+        const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+        const día = fecha.getDate().toString().padStart(2, '0');
+        return `${año}-${mes}-${día}`;
+    }
+
+    useEffect(() => {
+        axios.get('http://localhost:3001/obtener_acta')
+        .then(response => {
+            console.log();
+            setConsecutivo(response.data[0].consecutivo);
+            setTitulo(response.data[0].titulo);
+            setKeyWords(response.data[0].palabras_clave.palabras_clave.join(", "));
+            setAgenda(response.data[0].agenda);
+            setFechaDesde(formatearFecha(response.data[0].fecha));
+            setFechaHasta(formatearFecha(response.data[0].fecha));
+        })
+        .catch(error => {
+            console.error(error);
+        });
+      }, []);
 
     const handleConfirmar = async () => {
         const keyWordsTokens = keyWords.split(/,\s*/);
@@ -57,6 +78,9 @@ function ModificarPage(){
                     <h2>Modificar Acta</h2>
                 </div>
                 <form method="formBuscar">
+                    <div className="textBoxMain">
+                        <h3>Consecutivo #{consecutivo}</h3>
+                    </div>
                     <div className="textBoxMain">
                         <label>Título:</label>
                         <input type="text"
