@@ -93,20 +93,6 @@ app.post('/modificar_acta', async (req, res) => {
     }
 });
 
-app.get('/usuarios', async (req, res) => {
-    try {
-<<<<<<< HEAD
-        const usuarios = await pool.query('SELECT nombre, apellido1, apellido2 FROM qa.usuarios');
-=======
-        uarios = await pool.query('SELECT nombre, apellido1, apellido2 FROM qa.usuarios');
->>>>>>> 933ee3a4931a44d8f71a46079ac88a46fc132b5f
-        res.json(usuarios.rows);
-    } catch (error) {
-        console.error('Error al obtener usuarios:', error);
-        res.status(500).json({ error: 'Error al obtener usuarios' });
-    }
-});
-
 // Ruta para obtener todas las actas
 app.get('/actas', async(req, res) =>{
     try{
