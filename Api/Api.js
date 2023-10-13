@@ -8,10 +8,98 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 
 
-// Ruta para obtener todos los usuarios
+//Ruta: obtener acta
+app.get('/obtener_consecutivo', async (req, res) => {
+  try {
+      const consecutivo = await pool.query('SELECT last_value FROM qa.actas_id_seq;');
+      res.json(consecutivo.rows);
+  } catch (error) {
+      console.error('Error al obtener el consecutivo. Información:', error);
+      res.status(500).json({ error: 'Error al obtener el consecutivo.' });
+  }
+});
+
+
+//Ruta: agregar acta
+//Pendiente: agregar las dos fechas y subir el link al archivo y no el nombre
+app.post('/agregar_acta', async (req, res) => {
+    try {
+        const { 
+            consecutivo,
+            titulo,
+            keyWordsTokens,
+            agenda,
+            fechaDesde,
+            fechaHasta,
+            nombreArchivo } = req.body;
+
+        const sqlQuery = 'INSERT INTO qa.actas(titulo, fecha, consecutivo, palabras_clave, url_archivo, agenda) VALUES ($1, to_timestamp($2, \'YYYY-MM-DD\'), $3, $4, $5, $6)';
+        pool.query(sqlQuery, 
+            [titulo, fechaDesde, consecutivo, {palabras_clave: keyWordsTokens}, nombreArchivo, agenda],
+            (error, result) => {
+          if (error) {
+            console.error('Error al insertar la entrada. Información: ', error);
+            res.status(500).json({ mensaje: 'Error al insertar la entrada.' });
+          } else {
+            res.status(201).json({ mensaje: 'Entrada insertada con éxito.', resultado: result });
+          }
+        });
+      } catch (error) {
+        console.error('Error al insertar datos. Información:', error);
+        res.status(500).json({ mensaje: 'Error al insertar la entrada.' });
+      }
+});
+
+//Ruta: obtener acta
+app.get('/obtener_acta', async (req, res) => {
+  try {
+      const actas = await pool.query('SELECT * FROM qa.actas');
+      console.log(actas.rows);
+      res.json(actas.rows);
+  } catch (error) {
+      console.error('Error al obtener las entradas. Información:', error);
+      res.status(500).json({ error: 'Error al obtener las entradas.' });
+  }
+});
+
+//Ruta: modificar acta
+//Pendiente: agregar las dos fechas
+app.post('/modificar_acta', async (req, res) => {
+  try {
+      const {
+          id,
+          titulo,
+          keyWordsTokens,
+          agenda,
+          fechaDesde,
+          fechaHasta} = req.body;
+
+      console.log(req.body);
+
+      const sqlQuery = 'UPDATE qa.actas SET titulo=$1, fecha=to_timestamp($2, \'YYYY-MM-DD\'), palabras_clave=$3, agenda=$4 WHERE id=$5';
+      pool.query(sqlQuery, 
+          [titulo, fechaDesde, {palabras_clave: keyWordsTokens}, agenda, id],
+          (error, result) => {
+        if (error) {
+          console.error('Error al modificar la entrada. Información: ', error);
+          res.status(500).json({ mensaje: 'Error al insertar la entrada.' });
+        } else {
+          res.status(201).json({ mensaje: 'Entrada insertada con éxito.', resultado: result });
+        }
+      });
+    } catch (error) {
+      console.error('Error al insertar la entrada. Información:', error);
+      res.status(500).json({ mensaje: 'Error al insertar la entrada.' });
+    }
+});
+
 app.get('/usuarios', async (req, res) => {
     try {
+<<<<<<< HEAD
         const usuarios = await pool.query('SELECT nombre, apellido1, apellido2 FROM qa.usuarios');
+=======
+        uarios = await pool.query('SELECT nombre, apellido1, apellido2 FROM qa.usuarios');
+>>>>>>> 933ee3a4931a44d8f71a46079ac88a46fc132b5f
         res.json(usuarios.rows);
     } catch (error) {
         console.error('Error al obtener usuarios:', error);
