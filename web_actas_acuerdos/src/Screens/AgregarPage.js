@@ -138,7 +138,7 @@ function AgregarPage(){
                                 <button className="btnVolver" type="button">Volver</button>
                             </div>
                             <div className="ubicarHorizontal">
-                                <button className="btnConfirmar" onClick={handleConfirmar}>Confirmar</button>
+                                <button type="button" className="btnConfirmar" onClick={handleConfirmar}>Confirmar</button>
                             </div>
                         </div>
                     </div>

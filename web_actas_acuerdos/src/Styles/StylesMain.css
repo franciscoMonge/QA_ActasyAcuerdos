@@ -53,7 +53,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    width: 400px;
+    width: 600px;
     background: none;
     border-radius: 10px;
 }
@@ -98,6 +98,7 @@ form .textBoxMain{
 
 .dateInput {
     margin-right: 20px; 
+    margin-bottom: 5px;
 }
 
 .btnBuscar{
@@ -134,4 +135,30 @@ form .textBoxMain{
 .btnAgregar:hover{
     background: #08680b;
     transition: .5s;
+}
+
+.table_section{
+    height: 230px;
+    overflow: auto;
+    width: 800px;
+}
+
+.tableActas{
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.9em;
+    min-width: 400px;
+}
+
+.tableActas td{
+    padding: 12px 60px;
+    font-size: 16px;
+}
+
+.tableActas tbody tr{
+    border-bottom: 1px solid #c5bfbf;
+}
+
+.tableActas tbody tr:nth-of-type(even){
+    background-color: #e0e0e0;
 }
