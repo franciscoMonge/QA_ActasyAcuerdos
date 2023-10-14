@@ -5,6 +5,7 @@ import "../Styles/StylesAgregar.css"
 import axios from 'axios';
 
 function AgregarPage(){
+    const [consecutivo, setConsecutivo] = useState('');
     const [titulo, setTitulo] = useState('');
     const [keyWords, setKeyWords] = useState('');
     const [agenda, setAgenda] = useState('');
@@ -13,10 +14,21 @@ function AgregarPage(){
     const [archivo, setArchivo] = useState('');
     const [nombreArchivo, setNombreArchivo] = useState('');
 
+    useEffect(() => {
+        axios.get('http://localhost:3001/obtener_consecutivo')
+        .then(response => {
+            console.log(response.data[0].last_value);
+            setConsecutivo(Number(response.data[0].last_value)+1);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+      }, []);
+
     const handleConfirmar = async () => {
         const keyWordsTokens = keyWords.split(/,\s*/);
         const datos = {
-            consecutivo: 1,
+            consecutivo,
             titulo,
             keyWordsTokens,
             agenda,
@@ -70,6 +82,9 @@ function AgregarPage(){
                     <h2>Agregar Acta</h2>
                 </div>
                 <form method="formBuscar">
+                    <div className="textBoxMain">
+                        <h3>Consecutivo #{consecutivo}</h3>
+                    </div>
                     <div className="textBoxMain">
                         <label>Título:</label>
                         <input type="text" 

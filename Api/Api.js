@@ -7,11 +7,18 @@ const port = 3001;
 app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 
-// Ruta de ejemplo
-app.get('/holamundo', (req, res) => {
-    console.log(`Recibí :${req}`);
-    res.send('¡Hola, mundo!');
+
+//Ruta: obtener acta
+app.get('/obtener_consecutivo', async (req, res) => {
+  try {
+      const consecutivo = await pool.query('SELECT last_value FROM qa.actas_id_seq;');
+      res.json(consecutivo.rows);
+  } catch (error) {
+      console.error('Error al obtener el consecutivo. Información:', error);
+      res.status(500).json({ error: 'Error al obtener el consecutivo.' });
+  }
 });
+
 
 //Ruta: agregar acta
 //Pendiente: agregar las dos fechas y subir el link al archivo y no el nombre
@@ -41,6 +48,18 @@ app.post('/agregar_acta', async (req, res) => {
         console.error('Error al insertar datos. Información:', error);
         res.status(500).json({ mensaje: 'Error al insertar la entrada.' });
       }
+});
+
+//Ruta: obtener acta
+app.get('/obtener_acta', async (req, res) => {
+  try {
+      const actas = await pool.query('SELECT * FROM qa.actas');
+      console.log(actas.rows);
+      res.json(actas.rows);
+  } catch (error) {
+      console.error('Error al obtener las entradas. Información:', error);
+      res.status(500).json({ error: 'Error al obtener las entradas.' });
+  }
 });
 
 //Ruta: modificar acta
@@ -102,14 +121,15 @@ app.post('/obtener_ultima_bitacora', async (req, res) => {
   }
 });
 
-app.get('/usuarios', async (req, res) => {
-  try {
-      usuarios = await pool.query('SELECT nombre, apellido1, apellido2 FROM qa.usuarios');
-      res.json(usuarios.rows);
-  } catch (error) {
-      console.error('Error al obtener usuarios:', error);
-      res.status(500).json({ error: 'Error al obtener usuarios' });
-  }
+// Ruta para obtener todas las actas
+app.get('/actas', async(req, res) =>{
+    try{
+        const actas = await pool.query("SELECT id, titulo, fecha, consecutivo, palabras_clave-> 'palabras_clave' as palabras_clave, url_archivo, agenda FROM qa.actas");
+        res.json(actas.rows);
+    } catch(error){
+        console.error('Error al obtener actas:', error);
+        res.status(500).json({ error: 'Error al obtener actas' });
+    }
 });
 
 // Iniciar el servidor

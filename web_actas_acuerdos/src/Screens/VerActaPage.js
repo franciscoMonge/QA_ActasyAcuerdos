@@ -1,5 +1,6 @@
 
 import React, { Fragment, useState, useEffect } from 'react';
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from '../assets/LogoTEC.png'
 import "../Styles/VerActa.css"
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -107,7 +108,7 @@ function VerActaPage() {
             <p className='lblUltimaModif'>Última modificación por: {ultimaModif}</p>
         
             <div className='botones'>
-                <button className="btnModificar" onClick={handleModificar}>
+                <button className="btnModificar" onClick={() => handleModificarActa(id,titulo,fecha,consecutivo,palabras_clave, url_archivo,agenda)}>
                     <img className='btnModificar-icon' width="48" height="48" src="https://img.icons8.com/color/48/signing-a-document.png" alt="signing-a-document"/>
                     <span className="btnModificar-txt">Modificar acta</span>
                 </button>
