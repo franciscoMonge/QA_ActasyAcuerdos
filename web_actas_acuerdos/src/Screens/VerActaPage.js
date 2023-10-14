@@ -1,8 +1,24 @@
 import React, { Fragment } from 'react';
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from '../assets/LogoTEC.png'
 import "../Styles/VerActa.css"
 
 export function VerActaPage(){
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Datos enviados del mainpage
+    const id = location?.state?.id;
+    const titulo = location?.state?.titulo;
+    const fecha = location?.state?.fecha;
+    const consecutivo = location?.state?.consecutivo;
+    const palabras_clave = location?.state?.palabras_clave;
+    const url_archivo = location?.state?.url_archivo;
+    const agenda = location?.state?.agenda;
+
+    console.log('Acta Data', id,titulo,fecha,consecutivo,palabras_clave,url_archivo,agenda);
+
     return (
     <div className='page'>
         <div className="navbar">

@@ -13,7 +13,7 @@ function MainPage(){
 
     // En estas se almacenan aquellos datos para filtrar la búsqueda
     const [titulo, setTitulo] = useState("");
-    const [keyWords, setKeyWords] = useState([]);
+    const [keyWords, setKeyWords] = useState("");
     const [fechaDesde, setFechaDesde] = useState("");
     const [fechaHasta, setFechaHasta] = useState("");
     const [codigo, setCodigo] = useState("");
@@ -42,46 +42,9 @@ function MainPage(){
         //console.log('kewwords: ', actas[0].palabras_clave)
     }, [actas]);
 
-    const handleBuscar = () =>{
-        //console.log('estoooo: ',filtrarActas())
-        console.log('keywrods :', keyWords)
-
-        const cadena = ["1","2","7"];
-        
-        const array= [{titulo:"okk", nums:["1","2","3"]}, {titulo:"hola",nums:["2", "5", "7"]},{titulo:"adios",nums:["77","22","54"]}];
-        const x = "hola"
-
-        const diosayudame = () => {
-            return array.filter((obj) => {
-              const tituloCoincide = obj.titulo.includes(x);
-              let banderaKeywords = false;
-          
-              cadena.forEach((e) => {
-                const coincide = obj.nums.includes(e);
-                if (coincide) {
-                  banderaKeywords = true;
-                }
-              });
-          
-              if (tituloCoincide && banderaKeywords) {
-                // Filtrar por coincidencia en título y palabras clave
-                return true;
-              } else if (tituloCoincide) {
-                // Filtrar solo por coincidencia en título
-                //banderaTitulo = true;
-                return true;
-              } else if (banderaKeywords) {
-                // Filtrar solo por coincidencia en palabras clave
-                return true;
-              }
-              console.log('final')
-              return false;
-            });
-        };
-        
-        console.log('PROBANDO OK :', diosayudame())
-
-    };
+    const handleBuscar =()=>{
+        console.log('buscar')
+    }
 
     // Función para eliminar acentos y convertir minusculas para el filtro de titulos
     const normalizeString = (str) => {
@@ -90,6 +53,43 @@ function MainPage(){
           .replace(/[\u0300-\u036f]/g, "") // Elimina los acentos
           .toLowerCase();
       };
+
+
+      const filtrarActas1 = () => {
+
+
+        if (titulo === "" && keyWords === "") {
+            return actas; // Mostrar la lista original si ambos filtros están vacíos
+          }
+
+          const palabrasClavesFiltroList = keyWords.split(",").map((clave) => clave.trim());
+        
+          return actas.filter((acta) => {
+            const tituloCoincide = titulo === "" || acta.titulo.includes(titulo);
+        
+            const palabrasClavesCoinciden =
+              keyWords === "" ||
+              palabrasClavesFiltroList.every((clave) => acta.palabras_clave.includes(clave));
+        
+            return tituloCoincide && palabrasClavesCoinciden;
+        
+        
+
+          /*return actas.filter((acta) => {
+            const tituloCoincide = titulo === "" || acta.titulo.includes(titulo);
+        
+            const palabrasClavesCoinciden = keyWords.length === 0 || keyWords.every((clave) =>
+              acta.palabras_clave.includes(clave)
+            );
+
+            if(palabrasClavesCoinciden === true){
+                console.log('entroooo',palabrasClavesCoinciden)
+            }
+        
+            return tituloCoincide && palabrasClavesCoinciden;*/
+          });
+
+      }
 
     const filtrarActas = () => {
         return actas.filter((acta) => {
@@ -126,6 +126,11 @@ function MainPage(){
         navigate('/AgregarActa',{});
     };
 
+    const handleVerDetalle = (id,titulo,fecha,consecutivo,palabras_clave,url_archivo,agenda) =>{
+        navigate('/VerDetalle',{state:{id:id, titulo: titulo, fecha: fecha, consecutivo: consecutivo, palabras_clave: palabras_clave,
+                                        url_archivo: url_archivo, agenda: agenda}});
+    };
+
     return(
         <div className="bannerMain">
             <div className="navbar">
@@ -148,8 +153,7 @@ function MainPage(){
                     <div className="textBoxMain">
                         <label>Palabras claves:</label>
                         <input type="text" required placeholder="Separar las palabras por comas."
-                            onChange={(event)=>{const keywords = event.target.value.split(',').map(keyword => keyword.trim());
-                            setKeyWords(keywords);}}/>
+                            onChange={(event)=>{setKeyWords(event.target.value)}}/>
                     </div>
                     <div className="textBoxMain">
                         <label>Fecha de emisión:</label>
@@ -174,12 +178,13 @@ function MainPage(){
                 <div className="table_section">
                 <table className="tableActas">
                     <tbody>
-                        {filtrarActas().map((acta,index)=>(
+                        {filtrarActas1().map((acta,index)=>(
                             <tr key={index}>
                                 <td>{acta.consecutivo}</td>
                                 <td>{acta.titulo}</td>
                                 <td>{acta.fecha}</td>
-                                <td><button>Ver Detalle</button></td>
+                                <td><button onClick={() => handleVerDetalle(acta.id,acta.titulo,acta.fecha,acta.consecutivo,acta.palabras_clave,
+                                    acta.url_archivo,acta.agenda)}>Ver Detalle</button></td>
                             </tr>
                         ))}
                     </tbody>
