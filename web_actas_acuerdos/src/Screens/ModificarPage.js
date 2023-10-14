@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import logo from "../assets/LogoTEC.png"
 import "../Styles/StylesMain.css"
 import "../Styles/StylesAgregar.css"
@@ -9,15 +10,9 @@ function ModificarPage(){
     const [titulo, setTitulo] = useState('');
     const [keyWords, setKeyWords] = useState('');
     const [agenda, setAgenda] = useState('');
-    const [fechaDesde, setFechaDesde] = useState('');
-    const [fechaHasta, setFechaHasta] = useState('');
-    // Función para ajustar el tamaño del textarea según el contenido
-    const handleResizeTextarea = (event) => {
-        const textarea = event.target;
-        textarea.style.height = 'auto';
-        textarea.style.height = `${textarea.scrollHeight}px`;
-        setAgenda(event.target.value);
-    };
+    const [fecha, setFecha] = useState('');
+
+    const location = useLocation();
 
     const formatearFecha = (fecha) => {
         const año = fecha.getFullYear();
@@ -26,31 +21,43 @@ function ModificarPage(){
         return `${año}-${mes}-${día}`;
     }
 
+    // Datos enviados del mainpage
+
+    console.log(location?.state?.fecha);
+
+    const _id = location?.state?.id;
+    const _titulo = location?.state?.titulo;
+    const _fecha = formatearFecha(new Date(location?.state?.fecha));
+    const _consecutivo = location?.state?.consecutivo;
+    const _palabras_clave = location?.state?.palabras_clave;
+    const _url_archivo = location?.state?.url_archivo;
+    const _agenda = location?.state?.agenda;
+
+
+    // Función para ajustar el tamaño del textarea según el contenido
+    const handleResizeTextarea = (event) => {
+        const textarea = event.target;
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+        setAgenda(event.target.value);
+    };
+
     useEffect(() => {
-        axios.get('http://localhost:3001/obtener_acta')
-        .then(response => {
-            console.log();
-            setConsecutivo(response.data[0].consecutivo);
-            setTitulo(response.data[0].titulo);
-            setKeyWords(response.data[0].palabras_clave.palabras_clave.join(", "));
-            setAgenda(response.data[0].agenda);
-            setFechaDesde(formatearFecha(response.data[0].fecha));
-            setFechaHasta(formatearFecha(response.data[0].fecha));
-        })
-        .catch(error => {
-            console.error(error);
-        });
+        setConsecutivo(_consecutivo);
+        setTitulo(_titulo);
+        setKeyWords(_palabras_clave);
+        setAgenda(_agenda);
+        setFecha(_fecha);
       }, []);
 
     const handleConfirmar = async () => {
         const keyWordsTokens = keyWords.split(/,\s*/);
         const datos = {
-            id: 1,
+            id: _id,
             titulo,
             keyWordsTokens,
             agenda,
-            fechaDesde,
-            fechaHasta
+            fecha,
         };
 
         try{
@@ -112,16 +119,8 @@ function ModificarPage(){
                                 <label>Del:</label>
                                 <input 
                                     type="date"
-                                    value={fechaDesde}
-                                    onChange={(e) => setFechaDesde(e.target.value)}
-                                />
-                            </div>
-                            <div className="dateInput">
-                                <label>Al:</label>
-                                <input 
-                                    type="date"
-                                    value={fechaHasta}
-                                    onChange={(e) => setFechaHasta(e.target.value)}
+                                    value={fecha}
+                                    onChange={(e) => setFecha(e.target.value)}
                                 />
                             </div>
                         </div>

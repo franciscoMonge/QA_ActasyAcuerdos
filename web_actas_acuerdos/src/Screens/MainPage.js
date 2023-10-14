@@ -39,7 +39,7 @@ function MainPage(){
     useEffect(() => {
         // Este se ejecuta cuando actas cambie
         console.log('actas actualizadas:', actas);
-        //console.log('kewwords: ', actas[0].palabras_clave)
+        //console.log('keywords: ', actas[0].palabras_clave)
     }, [actas]);
 
     const handleBuscar =()=>{

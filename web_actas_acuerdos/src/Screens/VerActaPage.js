@@ -19,6 +19,11 @@ export function VerActaPage(){
 
     console.log('Acta Data', id,titulo,fecha,consecutivo,palabras_clave,url_archivo,agenda);
 
+    const handleModificarActa = (id,titulo,fecha,consecutivo,palabras_clave,url_archivo,agenda) =>{
+        navigate('/ModificarActa',{state:{id:id, titulo: titulo, fecha: fecha, consecutivo: consecutivo, palabras_clave: palabras_clave,
+                                        url_archivo: url_archivo, agenda: agenda}});
+    };
+
     return (
     <div className='page'>
         <div className="navbar">
@@ -51,7 +56,7 @@ export function VerActaPage(){
             <p className='lblUltimaModif'>Última modificación por: Usuario</p>
         
             <div className='botones'>
-                <button className="btnModificar">
+                <button className="btnModificar" onClick={() => handleModificarActa(id,titulo,fecha,consecutivo,palabras_clave, url_archivo,agenda)}>
                     <img className='btnModificar-icon' width="48" height="48" src="https://img.icons8.com/color/48/signing-a-document.png" alt="signing-a-document"/>
                     <span className="btnModificar-txt">Modificar acta</span>
                 </button>
