@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigation } from "react-router-dom";
 import logo from "../assets/LogoTEC.png"
 import "../Styles/StylesMain.css"
 import "../Styles/StylesAgregar.css"
@@ -13,6 +13,7 @@ function ModificarPage(){
     const [fecha, setFecha] = useState('');
 
     const location = useLocation();
+    const navigate = useNavigation();
 
     const formatearFecha = (fecha) => {
         const año = fecha.getFullYear();
@@ -33,7 +34,10 @@ function ModificarPage(){
     const _url_archivo = location?.state?.url_archivo;
     const _agenda = location?.state?.agenda;
 
-
+    const handleVolver = () => {
+        // Redirigir a la página de Ver todos los datos(main)
+        navigate(`/VerDetalle`);
+      };
     // Función para ajustar el tamaño del textarea según el contenido
     const handleResizeTextarea = (event) => {
         const textarea = event.target;
@@ -126,7 +130,7 @@ function ModificarPage(){
                         </div>
                         <div className="ubicarBtns">
                             <div className="ubicarHorizontal">
-                                <button type="button" className="btnVolver">Volver</button>
+                                <button type="button" className="btnVolver" onClick={handleVolver}>Volver</button>
                             </div>
                             <div className="ubicarHorizontal">
                                 <button type="button" className="btnConfirmar" onClick={handleConfirmar}>Confirmar</button>

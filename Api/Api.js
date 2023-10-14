@@ -113,8 +113,14 @@ app.post('/obtener_ultima_bitacora', async (req, res) => {
     const { 
       id_acta
     } = req.body;
-    ultima_bitacora = await pool.query('SELECT updated_by FROM qa.bitacora_actas INNER JOIN qa.usuarios ON qa.usuarios.id = qa.bitacora_actas.updated_by WHERE id_acta = $1 ORDER BY id DESC LIMIT 1',[id_acta]);
-      res.json(ultima_bitacora.rows);
+    const sqlQuery = `SELECT qa.usuarios.nombre || ' ' || qa.usuarios.apellido1 || ' ' || qa.usuarios.apellido2 as NOMBRE
+    FROM qa.usuarios 
+    INNER JOIN qa.bitacora_actas ON qa.usuarios.id = qa.bitacora_actas.updated_by 
+    WHERE id_acta = $1 
+    ORDER BY qa.bitacora_actas.id DESC 
+    LIMIT 1`;
+    const ultima_bitacora = await pool.query(sqlQuery, [id_acta]);
+    res.json(ultima_bitacora.rows);
   } catch (error) {
       console.error('Error al obtener bitácoras:', error);
       res.status(500).json({ error: 'Error al obtener bitácoras' });
