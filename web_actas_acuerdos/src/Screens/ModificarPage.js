@@ -116,7 +116,6 @@ function ModificarPage(){
                         <label>Fecha del acta:</label>
                         <div className="dateInputs">
                             <div className="dateInput">
-                                <label>Del:</label>
                                 <input 
                                     type="date"
                                     value={fecha}
