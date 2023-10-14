@@ -5,7 +5,6 @@ import "../Styles/StylesAgregar.css"
 import axios from 'axios';
 
 function AgregarPage(){
-    //const [consecutivo, setConsecutivo] = useState('');
     const [titulo, setTitulo] = useState('');
     const [keyWords, setKeyWords] = useState('');
     const [agenda, setAgenda] = useState('');

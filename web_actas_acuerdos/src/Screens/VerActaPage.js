@@ -1,43 +1,24 @@
-import React, { Fragment } from 'react';
+
+import React, { Fragment, useState, useEffect } from 'react';
 import logo from '../assets/LogoTEC.png'
 import "../Styles/VerActa.css"
+      }
 
-export function VerActaPage(id_acta){
-    // Acá se ponen las variables de esa ventana
-    const [titulo, setTitulo] = useState('');
-    const [fechaDesde, setFechaDesde] = useState('');
-    const [fechaHasta, setFechaHasta] = useState('');
-    const [palabrasClave, setpalabrasClave] = useState('');
-    const [ultimaModif, setultimaModif] = useState('');
-    const [agenda, setAgenda] = useState('');
-    const [modificaciones, setModificaciones] = useState('');//valorar text area o n registros
-    const [archivo, setArchivo] = useState('');
+      // Llama a la función de API para obtener última modificación
+      try {
+        const response = await axios.post('http://localhost:3001/obtener_ultima_bitacora', { id_acta });
+        console.log(response.data);
+        setUltimaModif(response.data);
+        alert('Se obtuvo última modificación.');
+      } catch (err) {
+        alert('Error al obtener última modificación: ' + err);
+      }
+    };
 
-    //Funcion para obtener datos de la Base de Datos
-    useEffect(() => {
-        // Verifica si tienes el ID del acta antes de realizar la solicitud a la API.
-        if (id_acta) {
-          fetch(`/api/obtener_info_acta/${id_acta}`) //Cambiar por la dirección adecuada
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error('No se puede encontrar información.');
-              }
-              return response.json();
-            })
-            .then((actaData) => {
-                // Accede a los campos del objeto "data"
-                const titulo = actaData.titulo;
-                const fechaDesde = actaData.fecha;
-                const palabrasClave = actaData.palabras_clave;
-                const archivo = actaData.url_archivo;
-                const agenda = actaData.agenda;
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
-      }, [id_acta]);   
-    return (
+    fetchData();
+  }, [id_acta, titulo, palabras_clave, agenda, fecha]);
+
+  return (
     <div className='page'>
         <div className="navbar">
             <img src={logo} className="logo" alt="Logo"/>
@@ -49,7 +30,7 @@ export function VerActaPage(id_acta){
         </div>
 
         <div className='volver'>
-            <button className="btnRegresar">
+            <button className="btnRegresar" onClick={handleVolver}>
                 <span className="btnRegresar-icon">◄</span>
                 <span className="btnRegresar-txt"> Volver al Índice de Actas y Acuerdos</span>
             </button>
@@ -57,26 +38,25 @@ export function VerActaPage(id_acta){
 
         <div className="container">
             <div className='header'>
-                <p className='lblConsecutivo'>Entrada #X</p>
-                <h1 className='lblTitulo'>Título del acta - Fecha o fechas</h1>
+                <p className='lblConsecutivo'>Entrada #{id_acta}</p>
+                <h1 className="lblTitulo">{titulo}</h1>
+                <p className='lblFecha'>Fecha: {fecha}</p>
             </div>
 
             <p>Palabras claves:</p>
-            <p className='lblPalabrasClaves'>
-                Lorem, ipsum, dolor, sit, amet, consectetur, adipiscing, elit, sed, eiusmod
-            </p>
+            <p className='lblPalabrasClaves'>{palabras_clave}</p>
 
-            <p className='lblUltimaModif'>Última modificación por: Usuario</p>
+            <p className='lblUltimaModif'>Última modificación por: {ultimaModif}</p>
         
             <div className='botones'>
-                <button className="btnModificar">
+                <button className="btnModificar" onClick={handleModificar}>
                     <img className='btnModificar-icon' width="48" height="48" src="https://img.icons8.com/color/48/signing-a-document.png" alt="signing-a-document"/>
                     <span className="btnModificar-txt">Modificar acta</span>
                 </button>
 
-                <button className="btnDescargar">
+                <button className="btnDescargar" onClick={handleDescargarArchivo}>
                     <img className='btnDescargar-icon' width="48" height="48" src="https://img.icons8.com/color/48/open-document.png" alt="signing-a-document"/>
-                    <span className="btnDescargar-txt">Modificar acta</span>
+                    <span className="btnDescargar-txt">Descargar acta</span>
                 </button>
             </div>
 
@@ -95,9 +75,23 @@ export function VerActaPage(id_acta){
                 </div>
             </div>
 
+            <div className="agendas">
+                <p>Agendas del acta</p>
+                <div className='filaAgenda' id='0'>
+                    <span className="filaUsuarioA">Usuario</span>
+                    <span className="filaRegistroA">Regsitro</span>
+                    <span className="filaFechaA">Fecha</span>
+                </div>
+                <div className='filaAgenda' id='1'>
+                    <span className="filaUsuarioA">Usuario</span>
+                    <span className="filaRegistroA">Regsitro</span>
+                    <span className="filaFechaA">Fecha</span>
+                </div>
+            </div>
+
         </div>
     </div>
-    )
+    );
 }
 
-export default VerActaPage
+export default VerActaPage;

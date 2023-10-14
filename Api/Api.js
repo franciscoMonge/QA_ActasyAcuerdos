@@ -79,8 +79,8 @@ app.post('/obtener_bitacoras_id', async (req, res) => {
     const { 
       id_acta
     } = req.body;
-      info_acta = await pool.query('SELECT id_acta, fecha, updated_by, tchecksum FROM qa.bitacora_actas WHERE id_acta ==' id_acta);
-      res.json(info_acta.rows);
+      bitacoras_acta = await pool.query('SELECT id_acta, fecha, updated_by, tchecksum FROM qa.bitacora_actas WHERE id_acta = $1', [id_acta]);
+      res.json(bitacoras_acta.rows);
   } catch (error) {
       console.error('Error al obtener bitácoras:', error);
       res.status(500).json({ error: 'Error al obtener bitácoras' });
@@ -89,12 +89,13 @@ app.post('/obtener_bitacoras_id', async (req, res) => {
 
 // Ruta para Obtener Ultima Bitacora
 app.post('/obtener_ultima_bitacora', async (req, res) => {
+  // 'SELECT qa.usuarios.nombre,qa.usuarios.apellido1,qa.usuarios.apellido2 as NOMBRE FROM qa.usuarios INNER JOIN qa.bitacora_actas ON qa.usuarios.id = qa.bitacora_actas.updated_by WHERE id_acta = $1 ORDER BY id DESC LIMIT 1',[id_acta]);
   try {
     const { 
       id_acta
     } = req.body;
-      info_acta = await pool.query('SELECT updated_by FROM qa.bitacora_actas INNER JOIN qa.usuarios ON qa.usuarios.id == qa.bitacora_actas.updated_by WHERE id_acta ==' id_acta);
-      res.json(info_acta.rows);
+    ultima_bitacora = await pool.query('SELECT updated_by FROM qa.bitacora_actas INNER JOIN qa.usuarios ON qa.usuarios.id = qa.bitacora_actas.updated_by WHERE id_acta = $1 ORDER BY id DESC LIMIT 1',[id_acta]);
+      res.json(ultima_bitacora.rows);
   } catch (error) {
       console.error('Error al obtener bitácoras:', error);
       res.status(500).json({ error: 'Error al obtener bitácoras' });
