@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/LogoTEC.png"
 import "../Styles/StylesMain.css"
 import "../Styles/StylesAgregar.css"
@@ -13,7 +13,7 @@ function ModificarPage(){
     const [fecha, setFecha] = useState('');
 
     const location = useLocation();
-    const navigate = useNavigation();
+    const navigate = useNavigate();
 
     const formatearFecha = (fecha) => {
         const año = fecha.getFullYear();
