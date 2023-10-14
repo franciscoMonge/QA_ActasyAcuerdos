@@ -29,13 +29,12 @@ app.post('/agregar_acta', async (req, res) => {
             titulo,
             keyWordsTokens,
             agenda,
-            fechaDesde,
-            fechaHasta,
+            fecha,
             nombreArchivo } = req.body;
 
         const sqlQuery = 'INSERT INTO qa.actas(titulo, fecha, consecutivo, palabras_clave, url_archivo, agenda) VALUES ($1, to_timestamp($2, \'YYYY-MM-DD\'), $3, $4, $5, $6)';
         pool.query(sqlQuery, 
-            [titulo, fechaDesde, consecutivo, {palabras_clave: keyWordsTokens}, nombreArchivo, agenda],
+            [titulo, fecha, consecutivo, {palabras_clave: keyWordsTokens}, nombreArchivo, agenda],
             (error, result) => {
           if (error) {
             console.error('Error al insertar la entrada. Información: ', error);
