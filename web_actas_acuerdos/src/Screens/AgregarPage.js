@@ -9,8 +9,7 @@ function AgregarPage(){
     const [titulo, setTitulo] = useState('');
     const [keyWords, setKeyWords] = useState('');
     const [agenda, setAgenda] = useState('');
-    const [fechaDesde, setFechaDesde] = useState('');
-    const [fechaHasta, setFechaHasta] = useState('');
+    const [fecha, setFecha] = useState('');
     const [archivo, setArchivo] = useState('');
     const [nombreArchivo, setNombreArchivo] = useState('');
 
@@ -32,8 +31,7 @@ function AgregarPage(){
             titulo,
             keyWordsTokens,
             agenda,
-            fechaDesde,
-            fechaHasta,
+            fecha,
             nombreArchivo
         };
 
@@ -113,19 +111,10 @@ function AgregarPage(){
                         <label>Fecha del acta:</label>
                         <div className="dateInputs">
                             <div className="dateInput">
-                                <label>Del:</label>
                                 <input 
                                     type="date"
-                                    value={fechaDesde}
-                                    onChange={(e) => setFechaDesde(e.target.value)}
-                                />
-                            </div>
-                            <div className="dateInput">
-                                <label>Al:</label>
-                                <input 
-                                    type="date"
-                                    value={fechaHasta}
-                                    onChange={(e) => setFechaHasta(e.target.value)} 
+                                    value={fecha}
+                                    onChange={(e) => setFecha(e.target.value)}
                                 />
                             </div>
                         </div>
