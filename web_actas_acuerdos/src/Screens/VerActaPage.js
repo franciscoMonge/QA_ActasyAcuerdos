@@ -120,15 +120,16 @@ function VerActaPage() {
 
             
             <div className="historial">
-        <p>Historial de modificaciones</p>
-        {bitacoras.map((bitacora, index) => (
-          <div className='filaHistorial' key={index}>
-            <span className="filaUsuario">{bitacora.updated_by}</span>
-            <span className="filaRegistro">{bitacora.tchecksum}</span>
-            <span className="filaFecha">{bitacora.fecha}</span>
-          </div>
-        ))}
-      </div>
+                <p>Historial de modificaciones</p>
+                {Array.isArray(bitacoras) && bitacoras.map((bitacora, index) => (
+                <div className='filaHistorial' key={index}>
+                <span className="filaUsuario">{bitacora.updated_by}</span>
+                <span className="filaRegistro">{bitacora.tchecksum}</span>
+                <span className="filaFecha">{bitacora.fecha}</span>
+                </div>
+            ))}
+            </div>
+
 
             <div className="agendas">
                 <p>Agendas del acta</p>
