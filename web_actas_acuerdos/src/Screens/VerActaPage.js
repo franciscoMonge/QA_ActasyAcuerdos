@@ -2,6 +2,64 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import logo from '../assets/LogoTEC.png'
 import "../Styles/VerActa.css"
+import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios'; // Asegúrate de importar axios si no lo has hecho
+
+function VerActaPage() {
+  const [bitacoras, setBitacoras] = useState(''); //Hay que buscarlas
+  const [ultimaModif, setUltimaModif] = useState(''); //Hay que buscarlas
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Datos enviados del mainpage
+  const id_acta = location?.state?.id;
+  const titulo = location?.state?.titulo;
+  const fecha = location?.state?.fecha;
+  const consecutivo = location?.state?.consecutivo;
+  const palabras_clave = location?.state?.palabras_clave;
+  const url_archivo = location?.state?.url_archivo;
+  const agenda = location?.state?.agenda;
+
+  console.log('Acta Data', id_acta,titulo,fecha,consecutivo,palabras_clave,url_archivo,agenda);
+
+  const handleDescargarArchivo = () => {
+    // Codigo para que descargue el archivo
+   // Luego, crea un elemento a para el enlace de descarga
+   const link = document.createElement('a');
+   link.href = url_archivo;
+ 
+   // Establece el nombre del archivo
+   if (url_archivo) {
+     link.setAttribute('download',url_archivo);
+   }
+ 
+   document.body.appendChild(link);
+   link.click();
+ 
+   // Limpia el enlace después de la descarga
+   document.body.removeChild(link);  
+  };
+  
+  const handleModificar = (id_acta,titulo,fecha,consecutivo,palabras_clave,url_archivo,agenda) =>{
+    navigate('/ModificarActa',{state:{id:id_acta, titulo: titulo, fecha: fecha, consecutivo: consecutivo, palabras_clave: palabras_clave,
+                                    url_archivo: url_archivo, agenda: agenda}});
+};
+
+  const handleVolver = () => {
+    // Redirigir a la página de Ver todos los datos(main)
+    navigate(`/MainPage`);
+  };
+ 
+  useEffect(() => {
+    // Llama a la función de API para todas las modificaciones
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('http://localhost:3001/obtener_bitacoras_id', { id_acta });
+        console.log(response.data);
+        setBitacoras(response.data);
+        alert('Se obtuvieron las bitácoras.');
+      } catch (err) {
+        alert('Error al obtener las bitácoras: ' + err);
       }
 
       // Llama a la función de API para obtener última modificación
