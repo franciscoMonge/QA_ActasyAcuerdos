@@ -22,15 +22,17 @@ function VerActaPage() {
   console.log('Acta Data', id_acta,titulo,fecha,consecutivo,palabras_clave,url_archivo,agenda);
 
   // Divide la cadena en palabras individuales utilizando un separador (por ejemplo, una coma)
-  const palabras_clave_array = palabras_clave.split(',');
+  const palabras_clave_array = palabras_clave.join(',');
 
-  const fecha_new_format = formatearFecha(new Date(fecha));
   const formatearFecha = (fecha) => {
     const año = fecha.getFullYear();
     const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
     const día = fecha.getDate().toString().padStart(2, '0');
     return `${año}-${mes}-${día}`;
   }
+
+  const fecha_new_format = formatearFecha(new Date(fecha));
+
   const handleDescargarArchivo = () => {
     // Codigo para que descargue el archivo
    // Luego, crea un elemento a para el enlace de descarga
@@ -67,14 +69,14 @@ function VerActaPage() {
         console.log(response.data);
         setBitacoras(response.data);;
       } catch (err) {
-        alert('Error al obtener las bitácoras: ' + err);
+        console.log('Error al obtener las bitácoras: ' + err)
+        //alert('Error al obtener las bitácoras: ' + err);
       }
 
       // Llama a la función de API para obtener última modificación
       try {
         const response = await axios.post('http://localhost:3001/obtener_ultima_bitacora', { id_acta });
-        console.log(response.data);
-        setUltimaModif(response.data);
+        setUltimaModif(response.data[0]);
       } catch (err) {
         alert('Error al obtener última modificación: ' + err);
       }
@@ -109,11 +111,9 @@ function VerActaPage() {
             </div>
 
             <p>Palabras claves:</p>
-            {palabras_clave_array.map((palabra, index) => (
-             <p className='lblPalabrasClaves' key={index}>{palabra.trim()}</p>
-             ))}
+            {palabras_clave}
 
-            <p className='lblUltimaModif'>Última modificación por: {ultimaModif}</p>
+            <p className='lblUltimaModif'>Última modificación por: {ultimaModif.nombre}</p>
         
             <div className='botones'>
                 <button className="btnModificar" onClick={() => handleModificarActa(id_acta,titulo,fecha,consecutivo,palabras_clave, url_archivo,agenda)}>
@@ -127,21 +127,23 @@ function VerActaPage() {
                 </button>
             </div>
 
-            
-            <div className="historial">
-                <p>Historial de modificaciones</p>
-                {Array.isArray(bitacoras) && bitacoras.map((bitacora, index) => (
-                <div className='filaHistorial' key={index}>
-                <span className="filaUsuario">{bitacora.updated_by}</span>
-                <span className="filaRegistro">{bitacora.tchecksum}</span>
-                <span className="filaFecha">{bitacora.fecha}</span>
-                </div>
-            ))}
+            <div className="table_section">
+                <table className="tableActas">
+                    <tbody>
+                      <p>Historial de modificaciones</p>
+                        {Array.isArray(bitacoras) && bitacoras.map((bitacora, index) =>(
+                            <tr key={index}>
+                                <td tabIndex='0'>{bitacora.updated_by}</td>
+                                <td tabIndex='0'>{bitacora.tchecksum}</td>
+                                <td tabIndex='0'>{bitacora.fecha}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
-
-
+            
             <div className="agendas">
-                <p>Agendas del acta</p>
+                <p>Agendas del acta:</p>
                 <div>{agenda}</div>
                 </div>
             </div>
@@ -150,3 +152,14 @@ function VerActaPage() {
 }
 
 export default VerActaPage;
+
+/*<div className="historial">
+                <p>Historial de modificaciones</p>
+                {Array.isArray(bitacoras) && bitacoras.map((bitacora, index) => (
+                <div className='filaHistorial' key={index}>
+                <span className="filaUsuario">{bitacora.updated_by}</span>
+                <span className="filaRegistro">{bitacora.tchecksum}</span>
+                <span className="filaFecha">{bitacora.fecha}</span>
+                </div>
+            ))}
+            </div>*/

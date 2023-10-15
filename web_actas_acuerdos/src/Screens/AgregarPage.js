@@ -3,8 +3,13 @@ import logo from "../assets/LogoTEC.png"
 import "../Styles/StylesMain.css"
 import "../Styles/StylesAgregar.css"
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 function AgregarPage(){
+
+
+    const navigate = useNavigate();
+
     const [consecutivo, setConsecutivo] = useState('');
     const [titulo, setTitulo] = useState('');
     const [keyWords, setKeyWords] = useState('');
@@ -64,6 +69,10 @@ function AgregarPage(){
           alert('Selecciona un archivo PDF válido.');
         }
       };
+    
+      const handleVolver = () =>{
+        navigate('/MainPage',{})
+      }
 
     return(
         <div className="bannerMain">
@@ -75,10 +84,11 @@ function AgregarPage(){
                     </ul>
                 </div>
             </div>
-            <div className="box1">   
-                <div className="header2">
+            <div className="header2">
                     <h2>Agregar Acta</h2>
                 </div>
+            <div className="box1">   
+               
                 <form method="formBuscar">
                     <div className="textBoxMain">
                         <h3>Consecutivo #{consecutivo}</h3>
@@ -133,7 +143,7 @@ function AgregarPage(){
                     <div>
                         <div className="ubicarBtns">
                             <div className="ubicarHorizontal">
-                                <button type="button" className="btnVolver">Volver</button>
+                                <button type="button" className="btnVolver" onClick={handleVolver}>Volver</button>
                             </div>
                             <div className="ubicarHorizontal">
                                 <button type="button" className="btnConfirmar" onClick={handleConfirmar}>Confirmar</button>

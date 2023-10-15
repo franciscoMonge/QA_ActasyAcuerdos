@@ -129,7 +129,8 @@ function ModificarPage(){
                         </div>
                         <div className="ubicarBtns">
                             <div className="ubicarHorizontal">
-                                <button type="button" className="btnVolver" onClick={handleVolver}>Volver</button>
+                                <button type="button" className="btnVolver" onClick={() => handleVolver(_id,_titulo,_fecha,_consecutivo,_palabras_clave,
+                                    _url_archivo,_agenda)}>Volver</button>
                             </div>
                             <div className="ubicarHorizontal">
                                 <button type="button" className="btnConfirmar" onClick={handleConfirmar}>Confirmar</button>
