@@ -67,8 +67,7 @@ function VerActaPage() {
       try {
         const response = await axios.post('http://localhost:3001/obtener_bitacoras_id', { id_acta });
         console.log(response.data);
-        setBitacoras(response.data);
-        alert('Se obtuvieron las bitácoras.');
+        setBitacoras(response.data);;
       } catch (err) {
         alert('Error al obtener las bitácoras: ' + err);
       }
@@ -78,7 +77,6 @@ function VerActaPage() {
         const response = await axios.post('http://localhost:3001/obtener_ultima_bitacora', { id_acta });
         console.log(response.data);
         setUltimaModif(response.data);
-        alert('Se obtuvo última modificación.');
       } catch (err) {
         alert('Error al obtener última modificación: ' + err);
       }
