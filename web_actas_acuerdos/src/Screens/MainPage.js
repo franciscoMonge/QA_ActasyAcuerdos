@@ -19,21 +19,16 @@ function MainPage(){
     const [codigo, setCodigo] = useState("");
 
 
-    // Carga todas las actas de la BD en la lista "actas"
-    useEffect(() => {
-        const fetchData = async () => {
-            const datos = { codigo, titulo};
-            try {
-                const response = await axios.get('http://localhost:3001/actas', { params: datos });
-                console.log(response.data);
-                setActas(response.data);
-                console.log('actas:', actas);
-            } catch (error) {
-                console.log('ERROR: Carga Fallida de Actas', error);
-            }
-        };
-    
-        fetchData();
+    // Carga todas las actas de la BD en la lista "actas" 
+    useEffect(() =>{
+        axios.get('http://localhost:3001/actas')
+        .then(response =>{
+            console.log('nuevo EFFECT');
+            setActas(response.data);
+        })
+        .catch(error => {
+            console.log('ERROR: Carga Fallida de Actas', error);
+        });
     }, []);
 
     useEffect(() => {
