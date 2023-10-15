@@ -96,7 +96,7 @@ app.post('/modificar_acta', async (req, res) => {
 // Ruta para obtener todas las actas
 app.get('/actas', async(req, res) =>{
     try{
-        const actas = await pool.query("SELECT id, titulo, fecha, consecutivo, palabras_clave-> 'palabras_clave' as palabras_clave, url_archivo, agenda FROM qa.actas");
+        const actas = await pool.query("SELECT id, titulo, fecha, consecutivo, palabras_clave-> 'palabras_clave' as palabras_clave, url_archivo, agenda FROM p_actas.actas");
         res.json(actas.rows);
     } catch(error){
         console.error('Error al obtener actas:', error);
