@@ -19,21 +19,16 @@ function MainPage(){
     const [codigo, setCodigo] = useState("");
 
 
-    // Carga todas las actas de la BD en la lista "actas"
-    useEffect(() => {
-        const fetchData = async () => {
-            const datos = { codigo, titulo};
-            try {
-                const response = await axios.get('http://localhost:3001/actas', { params: datos });
-                console.log(response.data);
-                setActas(response.data);
-                console.log('actas:', actas);
-            } catch (error) {
-                console.log('ERROR: Carga Fallida de Actas', error);
-            }
-        };
-    
-        fetchData();
+    // Carga todas las actas de la BD en la lista "actas" 
+    useEffect(() =>{
+        axios.get('http://localhost:3001/actas')
+        .then(response =>{
+            console.log('nuevo EFFECT');
+            setActas(response.data);
+        })
+        .catch(error => {
+            console.log('ERROR: Carga Fallida de Actas', error);
+        });
     }, []);
 
     useEffect(() => {
@@ -42,9 +37,6 @@ function MainPage(){
         //console.log('keywords: ', actas[0].palabras_clave)
     }, [actas]);
 
-    const handleBuscar =()=>{
-        console.log('buscar')
-    }
 
     // Función para eliminar acentos y convertir minusculas para el filtro de titulos
     const normalizeString = (str) => {
@@ -55,70 +47,47 @@ function MainPage(){
       };
 
 
-      const filtrarActas1 = () => {
-
-
-        if (titulo === "" && keyWords === "") {
-            return actas; // Mostrar la lista original si ambos filtros están vacíos
-          }
-
-          const palabrasClavesFiltroList = keyWords.split(",").map((clave) => clave.trim());
-        
-          return actas.filter((acta) => {
-            const tituloCoincide = titulo === "" || acta.titulo.includes(titulo);
-        
-            const palabrasClavesCoinciden =
-              keyWords === "" ||
-              palabrasClavesFiltroList.every((clave) => acta.palabras_clave.includes(clave));
-        
-            return tituloCoincide && palabrasClavesCoinciden;
-        
-        
-
-          /*return actas.filter((acta) => {
-            const tituloCoincide = titulo === "" || acta.titulo.includes(titulo);
-        
-            const palabrasClavesCoinciden = keyWords.length === 0 || keyWords.every((clave) =>
-              acta.palabras_clave.includes(clave)
-            );
-
-            if(palabrasClavesCoinciden === true){
-                console.log('entroooo',palabrasClavesCoinciden)
-            }
-        
-            return tituloCoincide && palabrasClavesCoinciden;*/
-          });
-
-      }
-
     const filtrarActas = () => {
+        if (titulo === "" && keyWords === "" && (fechaDesde === "" || fechaHasta === "")) {
+          return actas; // Mostrar la lista original si todos los filtros están vacíos
+        }
+      
+        const palabrasClavesFiltroList = keyWords.split(",").map((clave) => clave.trim());
+        
         return actas.filter((acta) => {
-            const tituloCoincide = normalizeString(acta.titulo).includes(normalizeString(titulo));
-            let banderaKeywords = false;
+          const tituloCoincide = titulo === "" || normalizeString(acta.titulo).includes(normalizeString(titulo));
+      
+          const palabrasClavesCoinciden =
+            keyWords === "" ||
+            palabrasClavesFiltroList.every((clave) => acta.palabras_clave.includes(clave));
+      
+          if (fechaDesde && fechaHasta) {
 
-            keyWords.forEach((elemento) => {
-                const coincide = acta.palabras_clave.includes(elemento);
-                if(coincide){
-                    banderaKeywords = true;
-                    //console.log('pasa por aqui', banderaKeywords)
-                }
-            });
-            //console.log('pasa por aqui222222', banderaKeywords, acta.palabras_clave)
-            if (tituloCoincide && banderaKeywords) {
-                // Filtrar por coincidencia en título y palabras clave
-                console.log('Esta entrando aqui 1')
-                return true;
-              } else if (tituloCoincide) {
-                // Filtrar solo por coincidencia en título
-                console.log('Esta entrando aqui 2')
-                return true;
-              } else if (banderaKeywords) {
-                // Filtrar solo por coincidencia en palabras clave
-                console.log('Esta entrando aqui 3')
-                return true;
-              }
-            console.log('final')
-            return false;
+
+            const localDateString = fechaDesde.replace(/Z$/, '');
+            const fechaDesdeObj = new Date(localDateString);
+            const fechaHastaObj = new Date(fechaHasta);
+            const fechaActaObj = new Date(acta.fecha);
+      
+            const formattedFechaDesde = formatDateToYYYYMMDD(fechaDesdeObj);
+            const formattedFechaHasta = formatDateToYYYYMMDD(fechaHastaObj);
+            const formattedFechaActa = formatDateToYYYYMMDD(fechaActaObj);
+
+            console.log('1 :', formattedFechaActa);
+            console.log('2 :', fechaDesdeObj);
+            console.log('3 :', fechaDesde);
+      
+            // Comprueba si la fecha de la acta está dentro del rango
+            if (formattedFechaActa >= formattedFechaDesde && formattedFechaActa <= formattedFechaHasta) {
+                console.log('aqui1')
+              return tituloCoincide && palabrasClavesCoinciden;
+            }
+          } else {
+            console.log('aqui2')
+            return tituloCoincide && palabrasClavesCoinciden;
+          }
+          console.log('aqui3')
+          return false;
         });
       };
 
@@ -130,6 +99,16 @@ function MainPage(){
         navigate('/VerDetalle',{state:{id:id, titulo: titulo, fecha: fecha, consecutivo: consecutivo, palabras_clave: palabras_clave,
                                         url_archivo: url_archivo, agenda: agenda}});
     };
+
+
+
+    function formatDateToYYYYMMDD(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Suma 1 al mes
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
 
     return(
         <div className="bannerMain">
@@ -143,34 +122,32 @@ function MainPage(){
             </div>
             <div className="box1">   
                 <div className="header2">
-                    <h2>Buscar Acta</h2>
+                    <h2 tabIndex='0'>Buscar Acta</h2>
                 </div>
                 <form method="formBuscar">
                     <div className="textBoxMain">
-                        <label>Título:</label>
+                        <label tabIndex='0'>Título:</label>
                         <input type="text" required onChange={(event)=>{setTitulo(event.target.value)}}/>
                     </div>
                     <div className="textBoxMain">
-                        <label>Palabras claves:</label>
-                        <input type="text" required placeholder="Separar las palabras por comas."
+                        <label tabIndex='0'>Palabras claves:</label>
+                        <input type="text" required placeholder="Separar las palabras por comas." aria-label="Separar las palabras por comas"
                             onChange={(event)=>{setKeyWords(event.target.value)}}/>
                     </div>
                     <div className="textBoxMain">
-                        <label>Fecha de emisión:</label>
+                        <label tabIndex='0' >Fecha de emisión:</label>
                         <div className="dateInputs">
-                            <div className="dateInput">
-                                <label>Desde:</label>
-                                <input type="date" required onChange={(event)=>{setFechaDesde(event.target.value)}}/>
+                            <div>
+                                <label tabIndex='0'>Desde:</label>
+                                <input  id="fechaInput" placeholder="dd/mes/año" type="date" onChange={(e)=>{setFechaDesde(e.target.value)}}/>
                             </div>
-                            <div className="dateInput">
-                                <label>Hasta:</label>
-                                <input type="date" required onChange={(event)=>{setFechaHasta(event.target.value)}}/>
+                            <div>
+                                <label tabIndex='0' style={{marginLeft:'10px'}}>Hasta:</label>
+                                <input id="fechaInput" style={{marginLeft:'10px'}} placeholder="dd/mes/año" type="date" onChange={(e)=>{setFechaHasta(e.target.value)}}/>
                             </div>
-                            <div className="dateInput">
-                                <button type="button" className="btnBuscar" onClick={handleBuscar}>Buscar</button>
-                            </div>
-                            <div className="dateInput">
-                                <button className="btnAgregar" type="button" onClick={handleAgregarActa}>Agregar acta</button>
+                            
+                            <div>
+                                <button style={{marginTop:'19px', marginLeft:'20px'}} className="btnAgregar" type="button" onClick={handleAgregarActa}>Agregar acta</button>
                             </div>
                         </div>
                     </div>
@@ -178,11 +155,11 @@ function MainPage(){
                 <div className="table_section">
                 <table className="tableActas">
                     <tbody>
-                        {filtrarActas1().map((acta,index)=>(
+                        {filtrarActas().map((acta,index)=>(
                             <tr key={index}>
-                                <td>{acta.consecutivo}</td>
-                                <td>{acta.titulo}</td>
-                                <td>{acta.fecha}</td>
+                                <td tabIndex='0'>{acta.consecutivo}</td>
+                                <td tabIndex='0'>{acta.titulo}</td>
+                                <td tabIndex='0'>{acta.fecha}</td>
                                 <td><button onClick={() => handleVerDetalle(acta.id,acta.titulo,acta.fecha,acta.consecutivo,acta.palabras_clave,
                                     acta.url_archivo,acta.agenda)}>Ver Detalle</button></td>
                             </tr>

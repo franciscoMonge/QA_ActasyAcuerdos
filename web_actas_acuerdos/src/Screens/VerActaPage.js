@@ -29,7 +29,9 @@ function VerActaPage() {
     const día = fecha.getDate().toString().padStart(2, '0');
     return `${año}-${mes}-${día}`;
   }
-  const fecha_new_format = formatearFecha(new Date(location?.state?.fecha));
+
+  const fecha_new_format = formatearFecha(new Date(fecha));
+
   const handleDescargarArchivo = () => {
     // Codigo para que descargue el archivo
    // Luego, crea un elemento a para el enlace de descarga
@@ -55,7 +57,7 @@ function VerActaPage() {
 
   const handleVolver = () => {
     // Redirigir a la página de Ver todos los datos(main)
-    navigate(`/MainPage`);
+    navigate(`/MainPage`,{});
   };
  
   useEffect(() => {
@@ -66,13 +68,13 @@ function VerActaPage() {
         console.log(response.data);
         setBitacoras(response.data);;
       } catch (err) {
-        alert('Error al obtener las bitácoras: ' + err);
+        console.log('Error al obtener las bitácoras: ' + err)
+        //alert('Error al obtener las bitácoras: ' + err);
       }
 
       // Llama a la función de API para obtener última modificación
       try {
         const response = await axios.post('http://localhost:3001/obtener_ultima_bitacora', { id_acta });
-        console.log(response.data);
         setUltimaModif(response.data[0]);
       } catch (err) {
         alert('Error al obtener última modificación: ' + err);
@@ -122,21 +124,23 @@ function VerActaPage() {
                 </button>
             </div>
 
-            
-            <div className="historial">
-                <p>Historial de modificaciones</p>
-                {Array.isArray(bitacoras) && bitacoras.map((bitacora, index) => (
-                <div className='filaHistorial' key={index}>
-                <span className="filaUsuario">{bitacora.updated_by}</span>
-                <span className="filaRegistro">{bitacora.tchecksum}</span>
-                <span className="filaFecha">{bitacora.fecha}</span>
-                </div>
-            ))}
+            <div className="table_section">
+                <table className="tableActas">
+                    <tbody>
+                      <p>Historial de modificaciones</p>
+                        {Array.isArray(bitacoras) && bitacoras.map((bitacora, index) =>(
+                            <tr key={index}>
+                                <td tabIndex='0'>{bitacora.updated_by}</td>
+                                <td tabIndex='0'>{bitacora.tchecksum}</td>
+                                <td tabIndex='0'>{bitacora.fecha}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
-
-
+            
             <div className="agendas">
-                <p>Agendas del acta</p>
+                <p>Agendas del acta:</p>
                 <div>{agenda}</div>
                 </div>
             </div>
@@ -145,3 +149,14 @@ function VerActaPage() {
 }
 
 export default VerActaPage;
+
+/*<div className="historial">
+                <p>Historial de modificaciones</p>
+                {Array.isArray(bitacoras) && bitacoras.map((bitacora, index) => (
+                <div className='filaHistorial' key={index}>
+                <span className="filaUsuario">{bitacora.updated_by}</span>
+                <span className="filaRegistro">{bitacora.tchecksum}</span>
+                <span className="filaFecha">{bitacora.fecha}</span>
+                </div>
+            ))}
+            </div>*/

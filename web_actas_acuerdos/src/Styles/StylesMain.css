@@ -96,8 +96,13 @@ form .textBoxMain{
     display: flex; 
 }
 
-.dateInput {
+.dateInput1{
     margin-right: 20px; 
+    margin-bottom: 5px;
+}
+
+.dateInput2 {
+    margin-right: 5px; 
     margin-bottom: 5px;
 }
 
