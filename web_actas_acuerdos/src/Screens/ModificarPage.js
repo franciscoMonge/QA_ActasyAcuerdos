@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/LogoTEC.png"
 import "../Styles/StylesMain.css"
 import "../Styles/StylesAgregar.css"
@@ -13,7 +13,7 @@ function ModificarPage(){
     const [fecha, setFecha] = useState('');
 
     const location = useLocation();
-    const navigate = useNavigation();
+    const navigate = useNavigate();
 
     const formatearFecha = (fecha) => {
         const año = fecha.getFullYear();
@@ -34,10 +34,10 @@ function ModificarPage(){
     const _url_archivo = location?.state?.url_archivo;
     const _agenda = location?.state?.agenda;
 
-    const handleVolver = () => {
-        // Redirigir a la página de Ver todos los datos(main)
-        navigate(`/VerDetalle`);
-      };
+    const handleVolver = (_id,_titulo,_fecha,_consecutivo,_palabras_clave,_url_archivo,_agenda) =>{
+        navigate('/VerDetalle',{state:{id:_id, titulo: _titulo, fecha: _fecha, consecutivo: _consecutivo, palabras_clave: _palabras_clave,
+                                        url_archivo: _url_archivo, agenda: _agenda}});
+    };
     // Función para ajustar el tamaño del textarea según el contenido
     const handleResizeTextarea = (event) => {
         const textarea = event.target;

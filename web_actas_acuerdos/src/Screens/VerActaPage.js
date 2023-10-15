@@ -19,9 +19,20 @@ function VerActaPage() {
   const palabras_clave = location?.state?.palabras_clave;
   const url_archivo = location?.state?.url_archivo;
   const agenda = location?.state?.agenda;
-
   console.log('Acta Data', id_acta,titulo,fecha,consecutivo,palabras_clave,url_archivo,agenda);
-
+  if (palabras_clave) {
+    // Divide la cadena en palabras individuales utilizando un separador (por ejemplo, una coma)
+    const palabras_clave_array = palabras_clave.split(',');
+  }
+  if(fecha){
+    const fecha_new_format = formatearFecha(new Date(location?.state?.fecha));
+  }
+  const formatearFecha = (fecha) => {
+    const año = fecha.getFullYear();
+    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+    const día = fecha.getDate().toString().padStart(2, '0');
+    return `${año}-${mes}-${día}`;
+  }
   const handleDescargarArchivo = () => {
     // Codigo para que descargue el archivo
    // Luego, crea un elemento a para el enlace de descarga
@@ -98,11 +109,13 @@ function VerActaPage() {
             <div className='header'>
                 <p className='lblConsecutivo'>Entrada #{id_acta}</p>
                 <h1 className="lblTitulo">{titulo}</h1>
-                <p className='lblFecha'>Fecha: {fecha}</p>
+                <p className='lblFecha'>Fecha: {fecha_new_format}</p>
             </div>
 
             <p>Palabras claves:</p>
-            <p className='lblPalabrasClaves'>{palabras_clave}</p>
+            {palabras_clave_array.map((palabra, index) => (
+             <p className='lblPalabrasClaves' key={index}>{palabra.trim()}</p>
+             ))}
 
             <p className='lblUltimaModif'>Última modificación por: {ultimaModif}</p>
         
