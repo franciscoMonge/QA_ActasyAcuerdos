@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/LogoTEC.png"
 import "../Styles/StylesMain.css"
 import "../Styles/StylesAgregar.css"
@@ -9,15 +10,10 @@ function ModificarPage(){
     const [titulo, setTitulo] = useState('');
     const [keyWords, setKeyWords] = useState('');
     const [agenda, setAgenda] = useState('');
-    const [fechaDesde, setFechaDesde] = useState('');
-    const [fechaHasta, setFechaHasta] = useState('');
-    // Función para ajustar el tamaño del textarea según el contenido
-    const handleResizeTextarea = (event) => {
-        const textarea = event.target;
-        textarea.style.height = 'auto';
-        textarea.style.height = `${textarea.scrollHeight}px`;
-        setAgenda(event.target.value);
-    };
+    const [fecha, setFecha] = useState('');
+
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const formatearFecha = (fecha) => {
         const año = fecha.getFullYear();
@@ -26,31 +22,46 @@ function ModificarPage(){
         return `${año}-${mes}-${día}`;
     }
 
+    // Datos enviados del mainpage
+
+    console.log(location?.state?.fecha);
+
+    const _id = location?.state?.id;
+    const _titulo = location?.state?.titulo;
+    const _fecha = formatearFecha(new Date(location?.state?.fecha));
+    const _consecutivo = location?.state?.consecutivo;
+    const _palabras_clave = location?.state?.palabras_clave;
+    const _url_archivo = location?.state?.url_archivo;
+    const _agenda = location?.state?.agenda;
+
+    const handleVolver = (_id,_titulo,_fecha,_consecutivo,_palabras_clave,_url_archivo,_agenda) =>{
+        navigate('/VerDetalle',{state:{id:_id, titulo: _titulo, fecha: _fecha, consecutivo: _consecutivo, palabras_clave: _palabras_clave,
+                                        url_archivo: _url_archivo, agenda: _agenda}});
+    };
+    // Función para ajustar el tamaño del textarea según el contenido
+    const handleResizeTextarea = (event) => {
+        const textarea = event.target;
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+        setAgenda(event.target.value);
+    };
+
     useEffect(() => {
-        axios.get('http://localhost:3001/obtener_acta')
-        .then(response => {
-            console.log();
-            setConsecutivo(response.data[0].consecutivo);
-            setTitulo(response.data[0].titulo);
-            setKeyWords(response.data[0].palabras_clave.palabras_clave.join(", "));
-            setAgenda(response.data[0].agenda);
-            setFechaDesde(formatearFecha(response.data[0].fecha));
-            setFechaHasta(formatearFecha(response.data[0].fecha));
-        })
-        .catch(error => {
-            console.error(error);
-        });
+        setConsecutivo(_consecutivo);
+        setTitulo(_titulo);
+        setKeyWords(_palabras_clave);
+        setAgenda(_agenda);
+        setFecha(_fecha);
       }, []);
 
     const handleConfirmar = async () => {
         const keyWordsTokens = keyWords.split(/,\s*/);
         const datos = {
-            id: 1,
+            id: _id,
             titulo,
             keyWordsTokens,
             agenda,
-            fechaDesde,
-            fechaHasta
+            fecha,
         };
 
         try{
@@ -109,25 +120,16 @@ function ModificarPage(){
                         <label>Fecha del acta:</label>
                         <div className="dateInputs">
                             <div className="dateInput">
-                                <label>Del:</label>
                                 <input 
                                     type="date"
-                                    value={fechaDesde}
-                                    onChange={(e) => setFechaDesde(e.target.value)}
-                                />
-                            </div>
-                            <div className="dateInput">
-                                <label>Al:</label>
-                                <input 
-                                    type="date"
-                                    value={fechaHasta}
-                                    onChange={(e) => setFechaHasta(e.target.value)}
+                                    value={fecha}
+                                    onChange={(e) => setFecha(e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className="ubicarBtns">
                             <div className="ubicarHorizontal">
-                                <button type="button" className="btnVolver">Volver</button>
+                                <button type="button" className="btnVolver" onClick={handleVolver}>Volver</button>
                             </div>
                             <div className="ubicarHorizontal">
                                 <button type="button" className="btnConfirmar" onClick={handleConfirmar}>Confirmar</button>

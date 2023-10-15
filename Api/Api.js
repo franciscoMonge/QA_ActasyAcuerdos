@@ -29,13 +29,12 @@ app.post('/agregar_acta', async (req, res) => {
             titulo,
             keyWordsTokens,
             agenda,
-            fechaDesde,
-            fechaHasta,
+            fecha,
             nombreArchivo } = req.body;
 
         const sqlQuery = 'INSERT INTO qa.actas(titulo, fecha, consecutivo, palabras_clave, url_archivo, agenda) VALUES ($1, to_timestamp($2, \'YYYY-MM-DD\'), $3, $4, $5, $6)';
         pool.query(sqlQuery, 
-            [titulo, fechaDesde, consecutivo, {palabras_clave: keyWordsTokens}, nombreArchivo, agenda],
+            [titulo, fecha, consecutivo, {palabras_clave: keyWordsTokens}, nombreArchivo, agenda],
             (error, result) => {
           if (error) {
             console.error('Error al insertar la entrada. Información: ', error);
@@ -92,11 +91,45 @@ app.post('/modificar_acta', async (req, res) => {
       res.status(500).json({ mensaje: 'Error al insertar la entrada.' });
     }
 });
+// Ruta para Obtener Bitácoras 
+app.post('/obtener_bitacoras_id', async (req, res) => {
+  try {
+    const { 
+      id_acta
+    } = req.body;
+      bitacoras_acta = await pool.query('SELECT id_acta, fecha, updated_by, tchecksum FROM qa.bitacora_actas WHERE id_acta = $1', [id_acta]);
+      res.json(bitacoras_acta.rows);
+  } catch (error) {
+      console.error('Error al obtener bitácoras:', error);
+      res.status(500).json({ error: 'Error al obtener bitácoras' });
+  }
+});
+
+// Ruta para Obtener Ultima Bitacora
+app.post('/obtener_ultima_bitacora', async (req, res) => {
+  // 'SELECT qa.usuarios.nombre,qa.usuarios.apellido1,qa.usuarios.apellido2 as NOMBRE FROM qa.usuarios INNER JOIN qa.bitacora_actas ON qa.usuarios.id = qa.bitacora_actas.updated_by WHERE id_acta = $1 ORDER BY id DESC LIMIT 1',[id_acta]);
+  try {
+    const { 
+      id_acta
+    } = req.body;
+    const sqlQuery = `SELECT qa.usuarios.nombre || ' ' || qa.usuarios.apellido1 || ' ' || qa.usuarios.apellido2 as NOMBRE
+    FROM qa.usuarios 
+    INNER JOIN qa.bitacora_actas ON qa.usuarios.id = qa.bitacora_actas.updated_by 
+    WHERE id_acta = $1 
+    ORDER BY qa.bitacora_actas.id DESC 
+    LIMIT 1`;
+    const ultima_bitacora = await pool.query(sqlQuery, [id_acta]);
+    res.json(ultima_bitacora.rows);
+  } catch (error) {
+      console.error('Error al obtener bitácoras:', error);
+      res.status(500).json({ error: 'Error al obtener bitácoras' });
+  }
+});
 
 // Ruta para obtener todas las actas
 app.get('/actas', async(req, res) =>{
     try{
-        const actas = await pool.query("SELECT id, titulo, fecha, consecutivo, palabras_clave-> 'palabras_clave' as palabras_clave, url_archivo, agenda FROM p_actas.actas");
+        const actas = await pool.query("SELECT id, titulo, fecha, consecutivo, palabras_clave-> 'palabras_clave' as palabras_clave, url_archivo, agenda FROM qa.actas");
         res.json(actas.rows);
     } catch(error){
         console.error('Error al obtener actas:', error);
