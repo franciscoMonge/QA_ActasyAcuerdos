@@ -20,13 +20,11 @@ function VerActaPage() {
   const url_archivo = location?.state?.url_archivo;
   const agenda = location?.state?.agenda;
   console.log('Acta Data', id_acta,titulo,fecha,consecutivo,palabras_clave,url_archivo,agenda);
-  if (palabras_clave) {
-    // Divide la cadena en palabras individuales utilizando un separador (por ejemplo, una coma)
-    const palabras_clave_array = palabras_clave.split(',');
-  }
-  if(fecha){
-    const fecha_new_format = formatearFecha(new Date(location?.state?.fecha));
-  }
+
+  // Divide la cadena en palabras individuales utilizando un separador (por ejemplo, una coma)
+  const palabras_clave_array = palabras_clave.split(',');
+
+  const fecha_new_format = formatearFecha(new Date(fecha));
   const formatearFecha = (fecha) => {
     const año = fecha.getFullYear();
     const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
@@ -58,7 +56,7 @@ function VerActaPage() {
 
   const handleVolver = () => {
     // Redirigir a la página de Ver todos los datos(main)
-    navigate(`/MainPage`);
+    navigate(`/MainPage`,{});
   };
  
   useEffect(() => {
