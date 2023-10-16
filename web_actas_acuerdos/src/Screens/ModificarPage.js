@@ -28,14 +28,15 @@ function ModificarPage(){
     const pTitulo = location?.state?.titulo;
     const pFecha = formatearFecha(new Date(location?.state?.fecha));
     const pConsecutivo = location?.state?.consecutivo;
-    const pPalabras_clave = location?.state?.palabras_clave;
+    const pPalabrasClave = location?.state?.palabras_clave;
     const pUrlArchivo = location?.state?.url_archivo;
     const pAgenda = location?.state?.agenda;
 
-    const handleVolver = (_id,_titulo,_fecha,_consecutivo,_palabras_clave,_url_archivo,_agenda) =>{
-        navigate('/VerDetalle',{state:{id:_id, titulo: _titulo, fecha: _fecha, consecutivo: _consecutivo, palabras_clave: _palabras_clave,
-                                        url_archivo: _url_archivo, agenda: _agenda}});
+    const handleVolver = (argId, argTitulo, argFecha, argConsecutivo, argPalabrasClave, argUrlArchivo, argAgenda) =>{
+        navigate('/VerDetalle',{state:{id: pId, titulo: pTitulo, fecha: pFecha, consecutivo: pConsecutivo, palabras_clave: pPalabrasClave,
+            url_archivo: pUrlArchivo, agenda:pAgenda}});
     };
+
     // Función para ajustar el tamaño del textarea según el contenido
     const handleResizeTextarea = (event) => {
         const textarea = event.target;
@@ -47,7 +48,7 @@ function ModificarPage(){
     useEffect(() => {
         setConsecutivo(pConsecutivo);
         setTitulo(pTitulo);
-        setKeyWords(pPalabras_clave);
+        setKeyWords(pPalabrasClave);
         setAgenda(pAgenda);
         setFecha(pFecha);
       }, []);
@@ -62,7 +63,7 @@ function ModificarPage(){
             const datos = {
                 id: pId,
                 titulo: pTitulo,
-                keyWordsTokens: pPalabras_clave,
+                keyWordsTokens: keyWordsTokens,
                 agenda: pAgenda,
                 fecha: pFecha,
             };
@@ -135,8 +136,8 @@ function ModificarPage(){
                         </div>
                         <div className="ubicarBtns">
                             <div className="ubicarHorizontal">
-                                <button type="button" className="btnVolver" onClick={() => handleVolver(_id,_titulo,_fecha,_consecutivo,_palabras_clave,
-                                    _url_archivo,_agenda)}>Volver</button>
+                                <button type="button" className="btnVolver" onClick={() => handleVolver(pId, pTitulo, pFecha, pConsecutivo, pPalabrasClave,
+                                    pUrlArchivo, pAgenda)}>Volver</button>
                             </div>
                             <div className="ubicarHorizontal">
                                 <button type="button" className="btnConfirmar" onClick={handleConfirmar}>Confirmar</button>
