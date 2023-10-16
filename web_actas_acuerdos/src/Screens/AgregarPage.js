@@ -24,24 +24,32 @@ function AgregarPage(){
         });
       }, []);
 
-    const handleConfirmar = async () => {
-        const keyWordsTokens = keyWords.split(/,\s*/);
-        const datos = {
-            consecutivo,
-            titulo,
-            keyWordsTokens,
-            agenda,
-            fecha,
-            nombreArchivo
-        };
+    const validarEspacios = () => {
+        return titulo.trim() && keyWords.trim() && nombreArchivo.trim() && (isNaN(fecha) || typeof fecha !== 'object' || fecha.constructor !== Date);
+    }
 
-        try{
-            const response = await axios.post('http://localhost:3001/agregar_acta', datos);
-            console.log(response.data);
-            alert("Acta subida exitosamente.");
-        }
-        catch(err){
-            alert("Error al subir el acta: ", err);
+    const handleConfirmar = async () => {
+        if(validarEspacios()){
+            const keyWordsTokens = keyWords.split(/,\s*/);
+            const datos = {
+                consecutivo,
+                titulo,
+                keyWordsTokens,
+                agenda,
+                fecha,
+                nombreArchivo
+            };
+
+            try{
+                const response = await axios.post('http://localhost:3001/agregar_acta', datos);
+                console.log(response.data);
+                alert("Acta subida exitosamente.");
+            }
+            catch(err){
+                alert("Error al subir el acta: ", err);
+            }
+        }else{
+            alert("Ha dejado espacios obligatorios en blanco ")
         }
     };
 
@@ -84,14 +92,14 @@ function AgregarPage(){
                         <h3>Consecutivo #{consecutivo}</h3>
                     </div>
                     <div className="textBoxMain">
-                        <label>Título:</label>
+                        <label>Título (obligatorio):</label>
                         <input type="text" 
                             value={titulo}
                             onChange={(e) => setTitulo(e.target.value)}
                         />
                     </div>
                     <div className="textBoxMain">
-                        <label>Palabras claves:</label>
+                        <label>Palabras claves (obligatorio):</label>
                         <input type="text"
                             placeholder="Separar las palabras por comas."
                             value={keyWords}
@@ -108,7 +116,7 @@ function AgregarPage(){
                         />
                     </div>
                     <div className="textBoxMain">
-                        <label>Fecha del acta:</label>
+                        <label>Fecha del acta (obligatorio):</label>
                         <div className="dateInputs">
                             <div className="dateInput">
                                 <input 
@@ -127,7 +135,7 @@ function AgregarPage(){
                             onChange={handleFileInputChange}
                             id="fileInput"
                         />
-                        <label htmlFor="fileInput">Subir archivo del acta: (PDF)</label>
+                        <label htmlFor="fileInput">Subir archivo del acta (obligatorio): (PDF)</label>
                         <label> { nombreArchivo } </label>
                     </div>
                     <div>

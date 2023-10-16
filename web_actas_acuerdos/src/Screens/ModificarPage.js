@@ -14,24 +14,22 @@ function ModificarPage(){
 
     const location = useLocation();
 
-    const formatearFecha = (fecha) => {
-        const año = fecha.getFullYear();
-        const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
-        const día = fecha.getDate().toString().padStart(2, '0');
-        return `${año}-${mes}-${día}`;
+    const formatearFecha = (argFecha) => {
+        const anno = argFecha.getFullYear();
+        const mes = (argFecha.getMonth() + 1).toString().padStart(2, '0');
+        const dia = argFecha.getDate().toString().padStart(2, '0');
+        return `${anno}-${mes}-${dia}`;
     }
 
     // Datos enviados del mainpage
 
-    console.log(location?.state?.fecha);
-
-    const _id = location?.state?.id;
-    const _titulo = location?.state?.titulo;
-    const _fecha = formatearFecha(new Date(location?.state?.fecha));
-    const _consecutivo = location?.state?.consecutivo;
-    const _palabras_clave = location?.state?.palabras_clave;
-    const _url_archivo = location?.state?.url_archivo;
-    const _agenda = location?.state?.agenda;
+    const pId = location?.state?.id;
+    const pTitulo = location?.state?.titulo;
+    const pFecha = formatearFecha(new Date(location?.state?.fecha));
+    const pConsecutivo = location?.state?.consecutivo;
+    const pPalabras_clave = location?.state?.palabras_clave;
+    const pUrlArchivo = location?.state?.url_archivo;
+    const pAgenda = location?.state?.agenda;
 
 
     // Función para ajustar el tamaño del textarea según el contenido
@@ -43,30 +41,38 @@ function ModificarPage(){
     };
 
     useEffect(() => {
-        setConsecutivo(_consecutivo);
-        setTitulo(_titulo);
-        setKeyWords(_palabras_clave);
-        setAgenda(_agenda);
-        setFecha(_fecha);
+        setConsecutivo(pConsecutivo);
+        setTitulo(pTitulo);
+        setKeyWords(pPalabras_clave);
+        setAgenda(pAgenda);
+        setFecha(pFecha);
       }, []);
 
-    const handleConfirmar = async () => {
-        const keyWordsTokens = keyWords.split(/,\s*/);
-        const datos = {
-            id: _id,
-            titulo,
-            keyWordsTokens,
-            agenda,
-            fecha,
-        };
+    const validarEspacios = () => {
+        return titulo.trim() && keyWords.trim() && (isNaN(fecha) || typeof fecha !== 'object' || fecha.constructor !== Date);
+    }
 
-        try{
-            const response = await axios.post('http://localhost:3001/modificar_acta', datos);
-            console.log(response.data);
-            alert("Datos del acta modificados exitosamente.");
-        }
-        catch(err){
-            alert("Error al modificar los datos del acta: ", err);
+    const handleConfirmar = async () => {
+        if(validarEspacios()){
+            const keyWordsTokens = keyWords.split(/,\s*/);
+            const datos = {
+                id: pId,
+                titulo: pTitulo,
+                keyWordsTokens: pPalabras_clave,
+                agenda: pAgenda,
+                fecha: pFecha,
+            };
+    
+            try{
+                const response = await axios.post('http://localhost:3001/modificar_acta', datos);
+                console.log(response.data);
+                alert("Datos del acta modificados exitosamente.");
+            }
+            catch(err){
+                alert("Error al modificar los datos del acta: ", err);
+            }
+        }else{
+            alert("Ha dejado espacios obligatorios en blanco ")
         }
     };
 
@@ -89,14 +95,14 @@ function ModificarPage(){
                         <h3>Consecutivo #{consecutivo}</h3>
                     </div>
                     <div className="textBoxMain">
-                        <label>Título:</label>
+                        <label>Título (obligatorio):</label>
                         <input type="text"
                             value={titulo}
                             onChange={(e) => setTitulo(e.target.value)}
                         />
                     </div>
                     <div className="textBoxMain">
-                        <label>Palabras claves:</label>
+                        <label>Palabras claves (obligatorio):</label>
                         <input type="text"
                             placeholder="Separar las palabras por comas."
                             value={keyWords}
@@ -113,7 +119,7 @@ function ModificarPage(){
                         />
                     </div>
                     <div className="textBoxMain">
-                        <label>Fecha del acta:</label>
+                        <label>Fecha del acta (obligatorio):</label>
                         <div className="dateInputs">
                             <div className="dateInput">
                                 <input 
